@@ -464,7 +464,7 @@ void cframe::on_botonEstadisticas_clicked()
     double promedioCalificaciones = (cantidadPeliculas > 0) ? (sumaCalificaciones / cantidadPeliculas) : 0.0;
 
     QString mensaje;
-    mensaje += QString("Promedio de calificaciones: %.2f\n").arg(promedioCalificaciones, 0, 'f', 2);
+    mensaje += QString("Promedio de calificaciones: %1\n").arg(promedioCalificaciones, 0, 'f', 2);
     mensaje += QString("Cantidad de películas por año:\n");
 
     for (auto it = peliculasPorAno.begin(); it != peliculasPorAno.end(); ++it) {
