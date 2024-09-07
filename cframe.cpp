@@ -440,6 +440,27 @@ void cframe::on_botonCargarArchivo_clicked()
     archivo.close();
 }
 
+void cframe::guardarEstadisticasEnArchivo(const QString& archivo, double promedioCalificaciones, const QMap<int, int>& peliculasPorAno)
+{
+    QFile file(archivo);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::critical(this, "Error", "No se pudo abrir el archivo para escritura.");
+        return;
+    }
+
+    QTextStream out(&file);
+
+    out << "Promedio de calificaciones: " << promedioCalificaciones << "\n";
+    out << "Cantidad de películas por año:\n";
+
+    for (auto it = peliculasPorAno.begin(); it != peliculasPorAno.end(); ++it) {
+        out << "Año " << it.key() << ": " << it.value() << " película(s)\n";
+    }
+
+    file.close();
+    QMessageBox::information(this, "Éxito", "Archivo de estadísticas generado exitosamente.");
+}
+
 void cframe::on_botonEstadisticas_clicked()
 {
     if (peliculas.isEmpty()) {
@@ -463,13 +484,12 @@ void cframe::on_botonEstadisticas_clicked()
 
     double promedioCalificaciones = (cantidadPeliculas > 0) ? (sumaCalificaciones / cantidadPeliculas) : 0.0;
 
-    QString mensaje;
-    mensaje += QString("Promedio de calificaciones: %1\n").arg(promedioCalificaciones, 0, 'f', 2);
-    mensaje += QString("Cantidad de películas por año:\n");
+    QString archivo = QFileDialog::getSaveFileName(this, "Guardar Archivo de Estadísticas", "", "Archivos de Texto (*.txt)");
 
-    for (auto it = peliculasPorAno.begin(); it != peliculasPorAno.end(); ++it) {
-        mensaje += QString("Año %1: %2 película(s)\n").arg(it.key()).arg(it.value());
+    if (archivo.isEmpty()) {
+        QMessageBox::warning(this, "Error", "No se seleccionó ningún archivo.");
+        return;
     }
 
-    QMessageBox::information(this, "Estadísticas", mensaje);
+    guardarEstadisticasEnArchivo(archivo, promedioCalificaciones, peliculasPorAno);
 }

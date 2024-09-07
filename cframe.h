@@ -27,6 +27,7 @@ public:
     void guardarProductosEnArchivo(const QString& nombreArchivo, const QVector<Producto>& productos);
     void guardarProductosEnArchivo(const QString& nombreArchivo);
     void crearArchivoBinarioDePrueba();
+    void guardarEstadisticasEnArchivo(const QString& archivo, double promedioCalificaciones, const QMap<int, int>& peliculasPorAno);
 
 private slots:
     void on_pushButton_clicked();
